@@ -1,0 +1,42 @@
+{
+  "name": "nodejs-01",
+  "version": "1.0.0",
+  "description": "nodejs tutorial",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon",
+    "dev": "nodemon"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "ignore": [
+      "node_modules"
+    ],
+    "exec": "ts-node ./src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1highbar45/nodejs-01.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1highbar45/nodejs-01/issues"
+  },
+  "homepage": "https://github.com/1highbar45/nodejs-01#readme",
+  "dependencies": {
+    "dotenv": "16.4.7",
+    "express": "5.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.0",
+    "@types/node": "22.10.7",
+    "nodemon": "3.1.9",
+    "ts-node": "10.9.2",
+    "typescript": "5.7.3"
+  }
+}
