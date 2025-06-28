@@ -13,9 +13,55 @@
 </head>
 
 <body>
-    <h1>Hello from ejs</h1>
-    <!-- <img src="images/hoidanit.png" /> -->
-    <a href="/create-user" class="btn btn-warning">Create a new user</a>
+    <div style="margin: 25">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>List Users:
+            </h1>
+            <div>
+                <a href="/create-user" class="btn btn-warning">Create a new user</a>
+            </div>
+        </div>
+        <hr />
+        <div>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <% users.forEach( function (user) { %>
+                        <tr>
+                            <th>
+                                <%= user.id %>
+                            </th>
+                            <td>
+                                <%= user.name %>
+                            </td>
+                            <td>
+                                <%= user.email %>
+                            </td>
+                            <td>
+                                <%= user.address %>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 10px">
+                                    <form action="/handle-view-user/<%= user.id %>" method="get">
+                                        <button class="btn btn-warning">View</button>
+                                    </form>
+                                    <form action="/handle-delete-user/<%= user.id %>" method="post">
+                                        <button class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>
