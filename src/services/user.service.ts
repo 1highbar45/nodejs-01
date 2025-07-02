@@ -1,5 +1,4 @@
 import { prisma } from "config/client";
-import getConnection from "config/database";
 
 const handleCreateUser = async (fullName: string, email: string, address: string) => {
     //insert into database
