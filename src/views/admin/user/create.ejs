@@ -10,6 +10,18 @@
     <title>Manage Users</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(() => {
+            const avatarFile = $("#avatarFile");
+            avatarFile.change(function (e) {
+                const imgURL = URL.createObjectURL(e.target.files[0]);
+                $("#avatarPreview").attr("src", imgURL);
+                $("#avatarPreview").css({ "display": "block" });
+            });
+        });
+    </script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -28,17 +40,41 @@
                                 <div class="col-6 mx-auto">
                                     <div>
                                         <h3 style="padding: 10px 0">Create a user:</h3>
-                                        <form action="/handle-create-user" method="post">
+                                        <form action="/admin/handle-create-user" method="post"
+                                            enctype="multipart/form-data">
                                             <div class="mb-3">
-                                                <label class="form-label">Name:</label>
+                                                <label class="form-label">Full name:</label>
                                                 <input name="fullName" type="text" class="form-control"
                                                     placeholder="your name">
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Email:</label>
-                                                <input name="email" type="email" class="form-control"
+                                                <input name="username" type="email" class="form-control"
                                                     placeholder="name@example.com">
                                             </div>
+                                            <div class="row">
+                                                <div class="mb-3 col-6">
+                                                    <label class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" name="phone">
+                                                </div>
+                                                <div class="mb-3 col-6">
+                                                    <label class="form-label">Role</label>
+                                                    <select name="role" class="form-select">
+                                                        <% roles.forEach((role,index)=> { %>
+                                                            <option value="<%-role.id %>">
+                                                                <%- role.name %>
+                                                            </option>
+                                                            <%})%>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="formFile" class="form-label">Avatar</label>
+                                                <input name="avatar" class="form-control" type="file" id="avatarFile"
+                                                    accept=".png, .jpg, .jpeg">
+                                            </div>
+                                            <img style="max-height: 250px; display: none;" alt="avatar preview"
+                                                id="avatarPreview" />
                                             <div class="mb-3">
                                                 <label class="form-label">Address:</label>
                                                 <textarea name="address" class="form-control" rows="2"></textarea>
