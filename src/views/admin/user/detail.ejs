@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
     <meta name="author" content="Hỏi Dân IT" />
-    <title>Create User</title>
+    <title>Detail User</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -39,29 +39,33 @@
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <div>
-                                        <h3 style="padding: 10px 0">Create a user:</h3>
-                                        <form action="/admin/handle-create-user" method="post"
-                                            enctype="multipart/form-data">
+                                        <h3 style="padding: 10px 0">View detail a user:</h3>
+                                        <form action="/admin/update-user" method="post" enctype="multipart/form-data">
+                                            <input value="<%= user.id %>" name="id" type="text"
+                                                style="display: none;" />
                                             <div class="mb-3">
                                                 <label class="form-label">Full name:</label>
-                                                <input name="fullName" type="text" class="form-control"
-                                                    placeholder="your name">
+                                                <input value="<%= user.fullName %>" name="fullName" type="text"
+                                                    class="form-control" placeholder="your name">
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Email:</label>
-                                                <input name="username" type="email" class="form-control"
-                                                    placeholder="name@example.com">
+                                                <input disabled value="<%= user.username %>" name="username"
+                                                    type="email" class="form-control" placeholder="name@example.com">
                                             </div>
                                             <div class="row">
                                                 <div class="mb-3 col-6">
                                                     <label class="form-label">Phone</label>
-                                                    <input type="text" class="form-control" name="phone">
+                                                    <input value="<%= user.phone %>" type="text" class="form-control"
+                                                        name="phone">
                                                 </div>
                                                 <div class="mb-3 col-6">
                                                     <label class="form-label">Role</label>
                                                     <select name="role" class="form-select">
                                                         <% roles.forEach((role,index)=> { %>
-                                                            <option value="<%-role.id %>">
+                                                            <option value="<%-role.id %>" <%=role.id===user.roleId
+                                                                ? 'selected' : '' %>
+                                                                >
                                                                 <%- role.name %>
                                                             </option>
                                                             <%})%>
@@ -73,15 +77,24 @@
                                                 <input name="avatar" class="form-control" type="file" id="avatarFile"
                                                     accept=".png, .jpg, .jpeg">
                                             </div>
-                                            <img style="max-height: 250px; display: none;" alt="avatar preview"
-                                                id="avatarPreview" />
-                                            <div class="mb-3">
-                                                <label class="form-label">Address:</label>
-                                                <textarea name="address" class="form-control" rows="2"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <button type="submit" class="btn btn-warning">Submit </button>
-                                            </div>
+
+                                            <% if (user.avatar) { %>
+                                                <img style="max-height: 250px; display: block;" alt="avatar preview"
+                                                    id="avatarPreview" src="/images/<%=user.avatar%>" />
+                                                <% } else { %>
+                                                    <img style="max-height: 250px; display: none;" alt="avatar preview"
+                                                        id="avatarPreview" />
+                                                    <% } %>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Address:</label>
+                                                            <textarea name="address" class="form-control"
+                                                                rows="2"><%= user.address %></textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <button type="submit" class="btn btn-warning">Submit
+                                                            </button>
+                                                        </div>
                                         </form>
                                     </div>
                                 </div>
