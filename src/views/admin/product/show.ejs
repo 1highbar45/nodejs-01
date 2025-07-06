@@ -24,7 +24,55 @@
                                 <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                                 <li class="breadcrumb-item active">Products</li>
                             </ol>
-                            <div>table product</div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <h5>Table Products:
+                                    </h5>
+                                    <div>
+                                        <a href="/admin/create-product" class="btn btn-warning">Create a product</a>
+                                    </div>
+                                </div>
+                                <hr />
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Factory</th>
+                                        <th>Action</th>
+                                    </thead>
+                                    <tbody>
+                                        <% products.forEach( function (product) { %>
+                                            <tr>
+                                                <th>
+                                                    <%= product.id %>
+                                                </th>
+                                                <td>
+                                                    <%= product.name %>
+                                                </td>
+                                                <td>
+                                                    <%= product.price %>
+                                                </td>
+                                                <td>
+                                                    <%= product.factory %>
+                                                </td>
+                                                <td>
+                                                    <div style="display: flex; gap: 10px">
+                                                        <form action="/admin/view-product/<%= product.id %>"
+                                                            method="get">
+                                                            <button class="btn btn-warning">View</button>
+                                                        </form>
+                                                        <form action="/admin/delete-product/<%= product.id %>"
+                                                            method="post">
+                                                            <button class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </main>
                     <%- include('../layout/footer'); %>
