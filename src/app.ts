@@ -1,3 +1,4 @@
+/// <reference path="./types/index.d.ts" />
 import express from "express";
 import 'dotenv/config';
 import webRoutes from 'src/routes/web';
@@ -61,7 +62,8 @@ initDatabase();
 
 //handle 404 not found
 app.use((req, res) => {
-    res.send("404 not found");
+    // res.send("404 not found");
+    res.render("status/404.ejs");
 })
 
 app.listen(port, () => {
