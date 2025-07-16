@@ -1,7 +1,7 @@
 import { prisma } from "config/client";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { getUserWithRoleById } from "services/client/auth.service";
+import { getUserSumCart, getUserWithRoleById } from "services/client/auth.service";
 import { comparePassword } from "services/user.service";
 
 const configPassportLocal = () => {
@@ -41,8 +41,11 @@ const configPassportLocal = () => {
     passport.deserializeUser(async function (user: any, callback) {
         const { id, username } = user;
         //query to database
-        const userInDB = await getUserWithRoleById(id)
-        return callback(null, { ...userInDB });
+        const userInDB: any = await getUserWithRoleById(id)
+        const sumCart = await getUserSumCart(id);
+        console.log(">>> check sumCart: ", sumCart);
+
+        return callback(null, { ...userInDB, sumCart: sumCart });
     });
 }
 

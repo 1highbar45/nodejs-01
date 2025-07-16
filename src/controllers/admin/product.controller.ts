@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { createProduct, getProductById, handleDeleteProduct, updateProductById } from "services/admin/product.service";
+import { addProductToCart } from "services/client/item.service";
 import { ProductSchema, TProductSchema } from "src/validation/product.schema";
 
 const getAdminCreateProductPage = async (req: Request, res: Response) => {
@@ -81,7 +82,20 @@ const postUpdateProduct = async (req: Request, res: Response) => {
     const image = req?.file?.filename ?? null;
 
     await updateProductById(+id, name, +price, detailDesc, shortDesc, +quantity, factory, target, image);
-    return res.redirect('/admin/product')
+    return res.redirect('/admin/product');
 };
 
-export { getAdminCreateProductPage, postAdminCreateProduct, postDeleteProduct, getViewProduct, postUpdateProduct }
+const postAddProductToCart = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = req.user;
+
+    if (user) {
+        await addProductToCart(1, +id, user);
+    } else {
+        return res.redirect('/login');
+    }
+
+    return res.redirect('/');
+};
+
+export { getAdminCreateProductPage, postAdminCreateProduct, postDeleteProduct, getViewProduct, postUpdateProduct, postAddProductToCart }
