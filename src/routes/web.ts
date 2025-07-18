@@ -1,8 +1,8 @@
 import express, { Express } from 'express';
 import { getCreateUserPage, getHomePage, getViewUser, postCreateUser, postDeleteUser, postUpdateUser, } from 'controllers/user.controller';
-import { getAdminOrderPage, getAdminProductPage, getAdminUserPage, getDashboardPage } from 'controllers/admin/dashboard.controller';
+import { getAdminOrderDetailPage, getAdminOrderPage, getAdminProductPage, getAdminUserPage, getDashboardPage } from 'controllers/admin/dashboard.controller';
 import fileUploadMiddleware from 'src/middleware/multer';
-import { getCartPage, getProductPage } from 'controllers/client/product.controller';
+import { getCartPage, getCheckOutPage, getOrderHistoryPage, getProductPage, getThanksPage, postDeleteProductInCart, postHandleCartToCheckOut, postPlaceOrder } from 'controllers/client/product.controller';
 import { getAdminCreateProductPage, getViewProduct, postAddProductToCart, postAdminCreateProduct, postDeleteProduct, postUpdateProduct } from 'controllers/admin/product.controller';
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegister } from 'controllers/client/auth.controller';
 import passport from 'passport';
@@ -25,8 +25,14 @@ const webRoutes = (app: Express) => {
     router.get('/register', getRegisterPage);
     router.post('/register', postRegister);
 
-    router.post("/add-product-to-cart/:id", postAddProductToCart)
-    router.get("/cart", getCartPage)
+    router.post("/add-product-to-cart/:id", postAddProductToCart);
+    router.get("/cart", getCartPage);
+    router.post("/delete-product-in-cart/:id", postDeleteProductInCart);
+    router.post("/handle-cart-to-checkout", postHandleCartToCheckOut);
+    router.get("/checkout", getCheckOutPage);
+    router.post("/place-order", postPlaceOrder);
+    router.get("/thanks", getThanksPage);
+    router.get("/order-history", getOrderHistoryPage);
 
     //admin routes
     router.get('/admin', getDashboardPage);
@@ -45,6 +51,7 @@ const webRoutes = (app: Express) => {
     router.post('/admin/update-product', fileUploadMiddleware("image", "images/product"), postUpdateProduct);
 
     router.get('/admin/order', getAdminOrderPage);
+    router.get('/admin/order/:id', getAdminOrderDetailPage);
 
     app.use("/", isAdmin, router);
 }

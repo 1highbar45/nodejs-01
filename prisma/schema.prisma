@@ -35,6 +35,8 @@ model User {
 
   cart Cart?
 
+  orders Order[]
+
   @@map("users")
 }
 
@@ -46,13 +48,6 @@ model Role {
   users User[]
 
   @@map("roles")
-}
-
-model Order {
-  id         Int @id @default(autoincrement())
-  totalPrice Int
-
-  @@map("orders")
 }
 
 model Product {
@@ -68,6 +63,7 @@ model Product {
   image      String? @db.VarChar(255)
 
   CartDetails CartDetail[]
+  OrderDetail OrderDetail[]
 
   @@map("products")
 }
@@ -96,4 +92,38 @@ model CartDetail {
   productId Int
 
   @@map("cart_detail")
+}
+
+model Order {
+  id              Int    @id @default(autoincrement())
+  totalPrice      Int
+  receiverAddress String @db.VarChar(255)
+  receiverName    String @db.VarChar(255)
+  receiverPhone   String @db.VarChar(255)
+  status          String @default("PENDING") //PENDING, CANCELED, COMPLETE
+
+  paymentMethod String //COD, BANKING...
+  paymentStatus String //PAYMENT_UNPAID, PAYMENT_SUCCED, PAYMENT_FAILED
+  paymentRef    String?
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  orderDetails OrderDetail[]
+
+  @@map("orders")
+}
+
+model OrderDetail {
+  id       Int @id @default(autoincrement())
+  price    Int
+  quantity Int
+
+  order   Order @relation(fields: [orderId], references: [id])
+  orderId Int
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@map("order_detail")
 }
