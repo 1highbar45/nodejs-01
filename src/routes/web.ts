@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import { getCreateUserPage, getHomePage, getViewUser, postCreateUser, postDeleteUser, postUpdateUser, } from 'controllers/user.controller';
 import { getAdminOrderDetailPage, getAdminOrderPage, getAdminProductPage, getAdminUserPage, getDashboardPage } from 'controllers/admin/dashboard.controller';
 import fileUploadMiddleware from 'src/middleware/multer';
-import { getCartPage, getCheckOutPage, getOrderHistoryPage, getProductPage, getThanksPage, postDeleteProductInCart, postHandleCartToCheckOut, postPlaceOrder } from 'controllers/client/product.controller';
+import { getCartPage, getCheckOutPage, getOrderHistoryPage, getProductPage, getThanksPage, postAddToCartFromDetailPage, postDeleteProductInCart, postHandleCartToCheckOut, postPlaceOrder } from 'controllers/client/product.controller';
 import { getAdminCreateProductPage, getViewProduct, postAddProductToCart, postAdminCreateProduct, postDeleteProduct, postUpdateProduct } from 'controllers/admin/product.controller';
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegister } from 'controllers/client/auth.controller';
 import passport from 'passport';
@@ -33,6 +33,7 @@ const webRoutes = (app: Express) => {
     router.post("/place-order", postPlaceOrder);
     router.get("/thanks", getThanksPage);
     router.get("/order-history", getOrderHistoryPage);
+    router.post("/add-to-cart-from-detail-page/:id", postAddToCartFromDetailPage)
 
     //admin routes
     router.get('/admin', getDashboardPage);

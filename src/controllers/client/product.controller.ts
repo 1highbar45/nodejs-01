@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deleteProductInCart, getOrderHistory, getProductById, getProductInCart, handlePlaceOrder, updateCartDetailBeforeCheckout } from "services/client/item.service";
+import { addProductToCart, deleteProductInCart, getOrderHistory, getProductById, getProductInCart, handlePlaceOrder, updateCartDetailBeforeCheckout } from "services/client/item.service";
 
 const getProductPage = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -17,8 +17,10 @@ const getCartPage = async (req: Request, res: Response) => {
 
     const totalPrice = cartDetails?.map(item => +item.price * +item.quantity)?.reduce((a, b) => a + b, 0);
 
+    const cartId = cartDetails.length ? cartDetails[0].cartId : 0;
+
     return res.render('client/product/cart.ejs', {
-        cartDetails, totalPrice
+        cartDetails, totalPrice, cartId
     })
 };
 
@@ -52,9 +54,10 @@ const postHandleCartToCheckOut = async (req: Request, res: Response) => {
     const user = req.user;
     if (!user) return res.redirect("/login");
 
+    const { cartId } = req.body
     const currentCartDetail: { id: string, quantity: string }[] = req.body?.cartDetails ?? [];
 
-    await updateCartDetailBeforeCheckout(currentCartDetail);
+    await updateCartDetailBeforeCheckout(currentCartDetail, cartId);
 
     return res.redirect("/checkout");
 };
@@ -65,7 +68,11 @@ const postPlaceOrder = async (req: Request, res: Response) => {
 
     const { receiverName, receiverAddress, receiverPhone, totalPrice } = req.body;
 
-    await handlePlaceOrder(user.id, receiverName, receiverAddress, receiverPhone, +totalPrice);
+    const message = await handlePlaceOrder(user.id, receiverName, receiverAddress, receiverPhone, +totalPrice);
+
+    if (message) {
+        return res.redirect("/checkout");
+    }
 
     return res.redirect("/thanks");
 };
@@ -88,7 +95,18 @@ const getOrderHistoryPage = async (req: Request, res: Response) => {
     });
 };
 
+const postAddToCartFromDetailPage = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { quantity } = req.body;
+    const user = req.user;
+    if (!user) return res.redirect("/login");
+
+    await addProductToCart(+quantity, +id, user);
+
+    return res.redirect(`/product/${id}`);
+};
+
 export {
     getProductPage, getCartPage, postDeleteProductInCart, getCheckOutPage,
-    postHandleCartToCheckOut, postPlaceOrder, getThanksPage, getOrderHistoryPage
+    postHandleCartToCheckOut, postPlaceOrder, getThanksPage, getOrderHistoryPage, postAddToCartFromDetailPage
 }
