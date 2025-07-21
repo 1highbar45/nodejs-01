@@ -34,10 +34,12 @@ const configPassportLocal = () => {
         return callback(null, user as any)
     }));
 
+    //store data in session
     passport.serializeUser(function (user: any, callback) {
         callback(null, { id: user.id, username: user.username });
     });
 
+    //attach data to req.user
     passport.deserializeUser(async function (user: any, callback) {
         const { id, username } = user;
         //query to database
